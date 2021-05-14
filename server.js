@@ -2,6 +2,7 @@
 const express = require("express");
 const mongo = require("mongoose");
 const session = require("express-session");
+const ejs = require("ejs");
 const url = require("./setup/config").url;
 const ip = "127.0.0.1";
 const port = 3000;
@@ -25,7 +26,7 @@ const sess = {
 
 app.use(session(sess));
 
-
+app.set("view engine", "ejs");
 
 // Database Connection !
 
@@ -139,7 +140,97 @@ app.get("/getData", redirectLogin, function (request, response) {
 
 // Admin Page !
 app.get("/dashboard", checkUser, function (request, response) {
-    response.send("Welcome to dashboard !");
+    // response.send("Welcome to dashboard !");
+    const normal = [];
+    const moderate = [];
+    const extreme = [];
+    const recent = [];
+
+    // Collect all data !
+    User.find()
+        .then(function (users) {
+            // console.log("Users : ", users);
+
+            for (let i = 0; i < users.length; i++) {
+                // console.log(`Person ${i+1} - ${users[i]}`);
+                for (let j = 0; j < users[i].readings.length; j++) {
+
+                    // Store user into array according to readings !
+                    if (users[i].readings[j].reading > 0 && users[i].readings[j].reading < 5) {
+                        const normalPerson = {
+                            name: users[i].name,
+                            age: users[i].age,
+                            gender: users[i].gender,
+                            contact: users[i].contact,
+                            reading: users[i].readings[j].reading,
+                            time: users[i].readings[j].time
+                        }
+
+                        // Push person 
+                        normal.push(normalPerson);
+                    } else {
+
+                        if (users[i].readings[j].reading > 4 && users[i].readings[j].reading < 8) {
+                            const moderatePerson = {
+                                name: users[i].name,
+                                age: users[i].age,
+                                gender: users[i].gender,
+                                contact: users[i].contact,
+                                reading: users[i].readings[j].reading,
+                                time: users[i].readings[j].time
+                            }
+
+                            // Push person 
+                            moderate.push(moderatePerson);
+                        } else {
+                            const extremePerson = {
+                                name: users[i].name,
+                                age: users[i].age,
+                                gender: users[i].gender,
+                                contact: users[i].contact,
+                                reading: users[i].readings[j].reading,
+                                time: users[i].readings[j].time
+                            }
+
+                            // Push person 
+                            extreme.push(extremePerson);
+                        }
+                    }
+
+                    // console.log("Length :", extreme.length);
+
+                }
+
+            }
+
+            // Recent readings!
+            for (let i = extreme.length; i > extreme.length - 5; i--) {
+                // console.log("Recent :", extreme[i]);
+                // console.log(i);
+                recent.push(extreme[i - 1]);
+
+            }
+
+            console.log("Normal Users :", normal);
+            console.log("Normal Length :", normal.length);
+            console.log("Moderate Users :", moderate);
+            console.log("Moderate Length :", moderate.length);
+            console.log("Extreme Users :", extreme);
+            console.log("Extreme Length :", extreme.length);
+            console.log("Recent :", recent);
+            console.log("Recent Length :", recent.length);
+
+            // Response
+            response.render("dashboard", {
+                normal: normal,
+                moderate: moderate,
+                extreme: extreme,
+                recent: recent
+            });
+        })
+        .catch(function (err) {
+            console.log("Something went wrong !", err);
+        });
 })
 
 // "/register"
