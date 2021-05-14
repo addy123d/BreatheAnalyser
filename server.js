@@ -422,7 +422,7 @@ app.post("/loginDetails", function (request, response) {
 });
 
 // Logout !
-app.get("/logout", redirectLogin, function (request, response) {
+app.get("/logout", function (request, response) {
     request.session.destroy(function (err) {
         if (err) {
             response.redirect("/");
