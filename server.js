@@ -92,6 +92,8 @@ function generateReadings() {
 
 // const users = [];
 
+app.use(express.static(__dirname + "/public"));
+
 // Paths 
 app.get("/", function (request, response) {
     response.send(`<a href="/getData"><button>Take a Test</button></a>`);
@@ -235,22 +237,24 @@ app.get("/dashboard", checkUser, function (request, response) {
 
 // "/register"
 app.get("/register", redirectHome, function (request, response) {
-    const html = `<h2>Register</h2>
-                    <form action="/registerDetails" method="POST">
-                    <input type="text" name="name" placeholder="Enter Name" autocomplete="off">
-                    <input type="number" name="age" placeholder="Enter Age" autocomplete="off">
-                    <select name="gender">
-                    <option hidden>Choose Gender</option>
-                    <option>Male</option>
-                    <option>Female</option>
-                    <option>Others</option>
-                    </select>
-                    <input type="text" name="number" placeholder="Contact (required)" autocomplete="off">
-                    <input type="password" name="password" placeholder="Enter Password" autocomplete="off">
-                    <button>Submit</button>
-                    </form>`;
+    // const html = `<h2>Register</h2>
+    //                 <form action="/registerDetails" method="POST">
+    //                 <input type="text" name="name" placeholder="Enter Name" autocomplete="off">
+    //                 <input type="number" name="age" placeholder="Enter Age" autocomplete="off">
+    //                 <select name="gender">
+    //                 <option hidden>Choose Gender</option>
+    //                 <option>Male</option>
+    //                 <option>Female</option>
+    //                 <option>Others</option>
+    //                 </select>
+    //                 <input type="text" name="number" placeholder="Contact (required)" autocomplete="off">
+    //                 <input type="password" name="password" placeholder="Enter Password" autocomplete="off">
+    //                 <button>Submit</button>
+    //                 </form>`;
 
-    response.send(html);
+    // response.send(html);
+
+    response.render("register");
 })
 
 
@@ -295,8 +299,8 @@ app.post("/registerDetails", function (request, response) {
             if (user) {
 
                 response.json({
-                    "emailerr": "User exists already !"
-                })
+                    result: "fail : user"
+                });
 
             } else {
 
@@ -305,7 +309,7 @@ app.post("/registerDetails", function (request, response) {
                     name: request.body.name,
                     age: request.body.age,
                     gender: request.body.gender,
-                    contact: request.body.number,
+                    contact: request.body.contact,
                     password: request.body.password,
                     readings: [],
                     timeStamp: new Date().toDateString()
@@ -323,7 +327,9 @@ app.post("/registerDetails", function (request, response) {
 
                         console.log("Created Session :", request.session);
 
-                        response.send("Registered successfully !");
+                        response.json({
+                            result: "success"
+                        });
                     })
                     .catch(function (error) {
                         console.log("Something went wrong" + error);
@@ -339,14 +345,15 @@ app.post("/registerDetails", function (request, response) {
 });
 
 app.get("/login", redirectHome, function (request, response) {
-    const html = `<h2>Login</h2>
-                    <form action="/loginDetails" method="POST">
-                    <input type="text" name="number" placeholder="Contact (required)" autocomplete="off">
-                    <input type="password" name="password" placeholder="Enter Password" autocomplete="off">
-                    <button>Submit</button>
-    </form>`;
+    // const html = `<h2>Login</h2>
+    //                 <form action="/loginDetails" method="POST">
+    //                 <input type="text" name="number" placeholder="Contact (required)" autocomplete="off">
+    //                 <input type="password" name="password" placeholder="Enter Password" autocomplete="off">
+    //                 <button>Submit</button>
+    // </form>`;
 
-    response.send(html);
+    // response.send(html);
+    response.render("login");
 });
 
 app.post("/loginDetails", function (request, response) {
@@ -375,7 +382,10 @@ app.post("/loginDetails", function (request, response) {
 
         console.log("Created Session :", request.session);
 
-        response.send("Successfully logged in !")
+        response.json({
+            result: "success",
+            role: "Admin"
+        });
     } else {
 
         // Normal Users !
@@ -399,15 +409,23 @@ app.post("/loginDetails", function (request, response) {
 
                         console.log("Created Session :", request.session);
 
-                        response.send("Successfully logged in !");
-                    } else {
                         response.json({
-                            "passworderror": "Password not matched !"
-                        })
+                            result: "success",
+                            role: "User"
+                        });
+
+                    } else {
+
+                        response.json({
+                            result: "fail : pass"
+                        });
                     }
 
                 } else {
-                    response.send("This contact is not registered with us !");
+
+                    response.json({
+                        result: "fail : user"
+                    });
                 }
             })
             .catch(function (err) {
