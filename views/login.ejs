@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Link awesome CDN -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+        integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+
+    <!-- Font CDN -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500&family=Poppins&family=Josefin+Sans&family=Antonio&display=swap"
+        rel="stylesheet">
+
+    <title>Login</title>
+</head>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+    }
+
+    .loginPage {
+        /* background: #f0f0f0; */
+        background: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.7)), url("police.jpg");
+        background-size: cover;
+        min-height: 100vh;
+    }
+
+    .container {
+        position: absolute;
+        top: 40%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    .form {
+        /* background: #f1f3f8; */
+        padding: 2em 3em 2em 3em;
+        margin: 2%;
+    }
+
+    .form>div {
+        margin-bottom: 10%;
+    }
+
+    /* Common CSS for all input tags ! */
+    input {
+        padding: 1em;
+        outline: none;
+        border: none;
+        border-radius: 4px;
+        background: #ffffff;
+        box-shadow: inset 11px 11px 22px #e6e6e6,
+            inset -11px -11px 22px #ffffff;
+        font-family: 'Montserrat', sans-serif;
+    }
+
+    /* Button */
+    .button {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .button button {
+        width: 70%;
+        /* padding: 1em 2em 1em 2em; */
+        padding: 1em;
+        outline: none;
+        border: none;
+        cursor: pointer;
+        background: rgb(25, 48, 70);
+        background: #000;
+        border: .5px solid #e7e7e7;
+        color: #ffffff;
+        font-weight: 500;
+        font-family: 'Poppins', sans-serif;
+        border-radius: 40px;
+        font-size: .8rem;
+        text-transform: uppercase;
+        font-weight: bold;
+        letter-spacing: 1px;
+        text-shadow: 1px 1px 2px #000000;
+        transition: .3s;
+    }
+
+    .button button:hover {
+        background: rgb(72, 77, 82);
+    }
+
+
+
+    /* Title */
+    .container .title {
+        margin-bottom: 10%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .title h2 {
+        font-family: 'Josefin Sans', sans-serif;
+        text-transform: uppercase;
+        color: #f5f5f5;
+    }
+
+    /* Eyes */
+    #eyeclose {
+        display: none;
+        transition: .3s;
+    }
+
+    #eyeclose.active {
+        display: block;
+    }
+
+    #eyeopen.active {
+        display: none;
+        transition: .3s;
+    }
+
+    /* new */
+    .new h2 {
+        font-size: 1.2rem;
+        color: #2d2d2e;
+        font-family: 'Josefin Sans', sans-serif;
+    }
+
+    .notification {
+        position: fixed;
+        top: 5%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-family: 'Poppins', sans-serif;
+        background: #e6e6e6;
+        filter:transparent(10px);
+        padding: 1em;
+        border-radius: 2px;
+        color: #333333;
+        font-size: .7rem;
+        display: none;
+        transition: all .3s;
+    }
+
+    .notification.active {
+        display: block;
+    }
+</style>
+
+<body>
+    <div class="notification">
+        <h2>Password not Matched ❌</h2>
+    </div>
+    <section class="loginPage">
+
+        <div class="container">
+
+
+            <div class="title">
+                <h2>Login <i class="fa fa-sign-in" aria-hidden="true"></i></h2>
+            </div>
+            <div class="form">
+                <div class="username">
+                    <input type="number" name="contact" id="contact" placeholder="Contact Number" autocomplete="off">
+                </div>
+                <div class="password">
+                    <input type="password" name="password" id="password" placeholder="Password" autocomplete="off">
+                </div>
+                <div class="button">
+                    <button id="loginButton">Sign in</button>
+                </div>
+
+
+                <div class="button">
+                    <button><a style="text-decoration:none;color:#ffffff" href="/register"><i class="fa fa-user-plus" aria-hidden="true"></i></a></button>
+                </div>
+
+            </div>
+
+
+        </div>
+    </section>
+</body>
+<script>
+    // Collect all details from login Page !
+    const contact = document.querySelector("#contact"),
+        password = document.querySelector("#password");
+
+    const loginButton = document.querySelector("#loginButton");
+
+
+    loginButton.addEventListener("click", function () {
+        // Send data to server !
+        const options = {
+            method: "POST",
+            body: JSON.stringify({
+                contact: contact.value,
+                password: password.value,
+            }),
+            headers: new Headers({ "Content-Type": "application/json" })
+        }
+
+
+        fetch('/loginDetails', options)
+            .then(function (response) {
+                return response.json();
+            })
+            .then(function (response) {
+                console.log(response);
+
+                if (response.result === "success") {
+                    location.href = `${location.origin}/`;
+                } else {
+                    if (response.result === "fail : pass") {
+                        document.querySelector(".notification").classList.toggle("active");
+                        document.querySelector(".notification").innerHTML = `<h2>Password Not Matched !</h2>`;
+
+                        setTimeout(() => {
+                            document.querySelector(".notification").classList.toggle("active");
+                        }, 3000);
+                    } else {
+                        document.querySelector(".notification").classList.toggle("active");
+                        document.querySelector(".notification").innerHTML = `<h2>Please Register First !</h2>`;
+
+                        setTimeout(() => {
+                            document.querySelector(".notification").classList.toggle("active");
+                        }, 3000);
+                    }
+
+                }
+            })
+            .catch(function (err) {
+                console.log(`Something went wrong : ${err}`);
+            });
+    })
+</script>
+
+</html>
