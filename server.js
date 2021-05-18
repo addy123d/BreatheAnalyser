@@ -51,10 +51,16 @@ function redirectLogin(request, response, next) {
     console.log("ID :", request.session.id);
 
     if (request.session && request.session.role === "Admin") {
-        response.redirect("/dashboard");
+        // response.redirect("/dashboard");
+        response.json({
+            redirect_url: "dashboard"
+        })
     } else {
         if (!request.session.contact) {
-            response.redirect("/login");
+            // response.redirect("/login");
+            response.json({
+                redirect_url: "login"
+            })
         } else {
             next();
         }
@@ -96,7 +102,16 @@ app.use(express.static(__dirname + "/public"));
 
 // Paths 
 app.get("/", function (request, response) {
-    response.send(`<a href="/getData"><button>Take a Test</button></a>`);
+    let status;
+
+    if (request.session.role) {
+        status = true;
+    } else {
+        status = false;
+    }
+    response.render("test", {
+        status: status
+    });
 })
 
 
@@ -129,7 +144,10 @@ app.get("/getData", redirectLogin, function (request, response) {
                 .then(function () {
                     console.log("Updated Successfully !");
 
-                    response.send("Updated Successfully !");
+                    // response.send("Updated Successfully !");
+                    response.json({
+                        "result": "success"
+                    });
                 })
                 .catch(function (err) {
                     console.log("Something went wrong !", err);
@@ -157,7 +175,7 @@ app.get("/dashboard", checkUser, function (request, response) {
                 // console.log(`Person ${i+1} - ${users[i]}`);
                 for (let j = 0; j < users[i].readings.length; j++) {
 
-                    // Store user into array according to readings !
+                    // Store users into array according to readings !
                     if (users[i].readings[j].reading > 0 && users[i].readings[j].reading < 5) {
                         const normalPerson = {
                             name: users[i].name,
@@ -291,7 +309,7 @@ app.post("/registerDetails", function (request, response) {
     // }
 
     User.findOne({
-            contact: request.body.number
+            contact: request.body.contact
         })
         .then(function (user) {
 
@@ -375,7 +393,7 @@ app.post("/loginDetails", function (request, response) {
     //     }
     // }
 
-    if (request.body.number === "111") {
+    if (request.body.contact === "111") {
         // Admin !
         // Create Session
         request.session.role = "Admin";
@@ -390,7 +408,7 @@ app.post("/loginDetails", function (request, response) {
 
         // Normal Users !
         User.findOne({
-                contact: request.body.number
+                contact: request.body.contact
             })
             .then(function (user) {
                 // Check if user exists or not !

@@ -191,7 +191,8 @@
 
 
                 <div class="button">
-                    <button><a style="text-decoration:none;color:#ffffff" href="/login"><i class="fa fa-sign-in" aria-hidden="true"></i></a></button>
+                    <button><a style="text-decoration:none;color:#ffffff" href="/login"><i class="fa fa-sign-in"
+                                aria-hidden="true"></i></a></button>
                 </div>
 
             </div>
@@ -240,6 +241,11 @@
                 } else {
                     document.querySelector(".notification").classList.toggle("active");
                     document.querySelector(".notification").innerHTML = `<h2>User exists already !</h2>`;
+
+
+                    setTimeout(() => {
+                        document.querySelector(".notification").classList.toggle("active");
+                    }, 3000);
                 }
             })
             .catch(function (err) {
