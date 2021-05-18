@@ -145,9 +145,13 @@ app.get("/getData", redirectLogin, function (request, response) {
                     console.log("Updated Successfully !");
 
                     // response.send("Updated Successfully !");
+
+
                     response.json({
-                        "result": "success"
+                        "result": "success",
+                        "reading": deviceReading
                     });
+
                 })
                 .catch(function (err) {
                     console.log("Something went wrong !", err);
@@ -224,7 +228,7 @@ app.get("/dashboard", checkUser, function (request, response) {
             }
 
             // Recent readings!
-            for (let i = extreme.length; i > extreme.length - 5; i--) {
+            for (let i = extreme.length; i > extreme.length - 10; i--) {
                 // console.log("Recent :", extreme[i]);
                 // console.log(i);
                 recent.push(extreme[i - 1]);

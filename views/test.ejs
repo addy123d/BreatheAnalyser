@@ -5,6 +5,10 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Link awesome CDN -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+        integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+
     <!-- Font CDN -->
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link
@@ -42,7 +46,8 @@
         transform: translate(-50%, -50%);
     }
 
-    .button button {
+    .button button,
+    .logout #logoutbtn {
         padding: .6em 1.9em .6em 1.9em;
         outline: none;
         border: none;
@@ -57,6 +62,16 @@
             -20px -20px 60px #ffffff;
         text-shadow: 1px 1px 1.5px #1c1d1e;
         transition: all .3s;
+    }
+
+    .logout #logoutbtn {
+        padding: .6em 1em .6em 1em;
+        font-size: 1rem;
+        background: #1c1d1e;
+    }
+
+    .logout #logoutbtn:hover {
+        background: #3d4042;
     }
 
     .button button:hover {
@@ -165,11 +180,23 @@
         font-family: 'Josefin Sans', sans-serif;
         color: #f1f3f8;
         background: #3d3e41;
+        background: rgb(243, 158, 46);
         padding: 1.3em;
         font-size: .8rem;
         border-radius: 6px;
         letter-spacing: 1px;
         display: none;
+    }
+
+    .notification h2 {
+        font-weight: 200;
+        text-shadow: 1px 1px 1px #1c1d1e;
+    }
+
+    .logout {
+        position: absolute;
+        top: 5%;
+        right: 8%;
     }
 
     @media(max-width:660px) {
@@ -190,7 +217,6 @@
 <body>
 
     <div class="notification">
-        <h2>Updated ✔</h2>
     </div>
 
 
@@ -203,7 +229,15 @@
             <div class="spinner spin-2"></div>
             <div class="spinner spin-3"></div>
         </section>
+
+        <%if(status){%>
+            <div class="logout">
+                <a href="/logout"><button id="logoutbtn"><i class="fa fa-sign-out" aria-hidden="true"></i></button></a>
+            </div>
+            <%}%>
     </section>
+
+
 
 </body>
 <script>
@@ -220,22 +254,58 @@
         fetch('/getData')
             .then(response => response.json())
             .then(response => {
-                if (response.result === "success") {
+
+                console.log(response);
+
+                // For normal and moderate !
+                if (response.result === "success" && response.reading > 8) {
                     document.querySelector(".container").classList.toggle("active");
                     // Notification
                     document.querySelector(".notification").style.display = "block";
-
+                    document.querySelector(".notification").style.background = "rgb(243, 30, 76)";
+                    document.querySelector(".notification").innerHTML = `<h2>Updated ✔ : ${response.reading}</h2>`;
 
                     setTimeout(() => {
                         document.querySelector(".notification").style.display = "none";
+                        document.querySelector(".notification").style.background = "#3d3e41";
                     }, 3000);
                 } else {
-                    if (response.redirect_url === "login") {
-                        location.href = `${location.origin}/login`;
+                    if (response.result === "success" && (response.reading > 4 && response.reading < 8)) {
+                        document.querySelector(".container").classList.toggle("active");
+                        // Notification
+                        document.querySelector(".notification").style.display = "block";
+                        document.querySelector(".notification").style.background = "rgb(243, 158, 46)";
+                        document.querySelector(".notification").innerHTML = `<h2>Updated ✔ : ${response.reading}</h2>`;
+
+                        setTimeout(() => {
+                            document.querySelector(".notification").style.display = "none";
+                            document.querySelector(".notification").style.background = "#3d3e41";
+                        }, 3000);
                     } else {
-                        location.href = `${location.origin}/dashboard`;
+                        if (response.result === "success" && (response.reading > 0 && response.reading < 4)) {
+                            document.querySelector(".container").classList.toggle("active");
+                            // Notification
+                            document.querySelector(".notification").style.display = "block";
+                            document.querySelector(".notification").style.background = "#3d3e41";
+                            document.querySelector(".notification").innerHTML = `<h2>Updated ✔ : ${response.reading}</h2>`;
+
+                            setTimeout(() => {
+                                document.querySelector(".notification").style.display = "none";
+                                document.querySelector(".notification").style.background = "#3d3e41";
+                            }, 3000);
+                        } else {
+                            if (response.redirect_url === "login") {
+                                location.href = `${location.origin}/login`;
+                            } else {
+                                location.href = `${location.origin}/dashboard`;
+                            }
+                        }
+
                     }
+
                 }
+
+
             })
             .catch(function (err) {
                 console.log(`Something went wrong : ${err}`);
