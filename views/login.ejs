@@ -138,7 +138,7 @@
         transform: translate(-50%, -50%);
         font-family: 'Poppins', sans-serif;
         background: #e6e6e6;
-        filter:transparent(10px);
+        filter: transparent(10px);
         padding: 1em;
         border-radius: 2px;
         color: #333333;
@@ -177,7 +177,8 @@
 
 
                 <div class="button">
-                    <button><a style="text-decoration:none;color:#ffffff" href="/register"><i class="fa fa-user-plus" aria-hidden="true"></i></a></button>
+                    <button><a style="text-decoration:none;color:#ffffff" href="/register"><i class="fa fa-user-plus"
+                                aria-hidden="true"></i></a></button>
                 </div>
 
             </div>
@@ -213,26 +214,32 @@
             .then(function (response) {
                 console.log(response);
 
-                if (response.result === "success") {
-                    location.href = `${location.origin}/`;
+                if (response.result === "success" && response.role === "Admin") {
+                    location.href = `${location.origin}/dashboard`;
                 } else {
-                    if (response.result === "fail : pass") {
-                        document.querySelector(".notification").classList.toggle("active");
-                        document.querySelector(".notification").innerHTML = `<h2>Password Not Matched !</h2>`;
-
-                        setTimeout(() => {
-                            document.querySelector(".notification").classList.toggle("active");
-                        }, 3000);
+                    if (response.result === "success") {
+                        location.href = `${location.origin}/`;
                     } else {
-                        document.querySelector(".notification").classList.toggle("active");
-                        document.querySelector(".notification").innerHTML = `<h2>Please Register First !</h2>`;
-
-                        setTimeout(() => {
+                        if (response.result === "fail : pass") {
                             document.querySelector(".notification").classList.toggle("active");
-                        }, 3000);
-                    }
+                            document.querySelector(".notification").innerHTML = `<h2>Password Not Matched !</h2>`;
 
+                            setTimeout(() => {
+                                document.querySelector(".notification").classList.toggle("active");
+                            }, 3000);
+                        } else {
+                            document.querySelector(".notification").classList.toggle("active");
+                            document.querySelector(".notification").innerHTML = `<h2>Please Register First !</h2>`;
+
+                            setTimeout(() => {
+                                document.querySelector(".notification").classList.toggle("active");
+                            }, 3000);
+                        }
+
+                    }
                 }
+
+
             })
             .catch(function (err) {
                 console.log(`Something went wrong : ${err}`);

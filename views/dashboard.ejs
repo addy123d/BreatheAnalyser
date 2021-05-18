@@ -1,158 +1,353 @@
-<!DOCTYPE html>
-<html lang="en">
+<html class="htmlclass">
 
 <head>
+    <title>Admin Dashboard</title>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
+    <meta name="viewport" content="width=device-width" />
+
+    <!-- Link awesome CDN -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+        integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+
+    <!-- Font CDN -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500&family=Poppins&family=Josefin+Sans&family=Antonio&family=Roboto+Mono&display=swap"
+        rel="stylesheet">
+
+
 </head>
 <style>
-    .recentcontainer,
-    .normalcontainer,
-    .moderatecontainer,
-    .extremecontainer {
+    .bodyclass {
+        padding: 1rem;
+        font-family: 'Poppins', sans-serif;
+        font-family: 'Roboto Mono', sans-serif;
+        background: #f1f3f8;
+        color: #1c1d1e;
+    }
+
+    .responsive-table {
+        display: block;
+        font-size: 1.3rem;
+    }
+
+    [class^="day-section"] {
+        margin-bottom: 1rem;
+    }
+
+    .day-content {
+        padding: 1rem;
+        border: 1px solid #ccc;
+        margin: -1px 0 0 -1px;
+        box-sizing: border-box;
+    }
+
+    p.day-content:hover {
+        background: #7885f8;
+    }
+
+    .head {
+        background: #eaeaea;
+        font-size: 1.25rem;
+    }
+
+    @media (min-width: 800px) {
+        .responsive-table {
+            display: flex;
+        }
+
+        [class^="day-section"] {
+            flex-grow: 1;
+        }
+    }
+
+    /* Buttons */
+    .buttons {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 2%;
+    }
+
+    @media (max-width:560px) {
+        .buttons {
+            flex-direction: column;
+        }
+    }
+
+    .buttons>div {
+        padding-top: 0;
+        padding: 1em;
+    }
+
+    .buttons>div button,
+    #logoutbtn {
+        padding: .7em 1em .7em 1em;
+        outline: none;
+        border: none;
+        cursor: pointer;
+        background: rgb(25, 48, 70);
+        color: #ffffff;
+        font-weight: 500;
+        font-family: 'Montserrat', sans-serif;
+        border-radius: 5px;
+        font-size: .8rem;
+        text-transform: uppercase;
+        font-weight: bold;
+        letter-spacing: 1px;
+        text-shadow: 1px 1px 2px #000000;
+        transition: .3s;
+    }
+
+    .buttons>div button:hover {
+        background: rgb(86, 90, 94);
+    }
+
+    .logout {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    #logoutbtn {
+        background: rgb(247, 49, 49);
+        font-size: 1rem;
+    }
+
+    #logoutbtn:hover {
+        background: rgb(143, 26, 26);
+    }
+
+    .recent,
+    .normal,
+    .moderate,
+    .extreme {
         display: none;
     }
 </style>
 
-<body>
+<body class="bodyclass">
     <div class="buttons">
-        <input type="radio" id="recent" name="recent" value="recent">
-        <label for="recent">Recent</label>
-        <input type="radio" id="normal" name="recent" value="normal">
-        <label for="normal">Normal</label>
-        <input type="radio" id="moderate" name="recent" value="moderate">
-        <label for="moderate">Moderate</label>
-        <input type="radio" id="extreme" name="recent" value="extreme">
-        <label for="extreme">Extreme</label>
-    </div>
-    <!-- Recent -->
-    <div class="recentcontainer">
-        <h1>Recent</h1>
-        <div class="users">
-            <%for(let i=0; i < recent.length;i++){%>
-                <div class="person">
-                    <h4>Name - <%= recent[i].name%>
-                    </h4>
-                    <p>Gender - <%= recent[i].gender%>
-                    </p>
-                    <p>Age - <%= recent[i].age%>
-                    </p>
-                    <p>Contact - <%= recent[i].contact%>
-                    </p>
-                    <p>Reading - <%= recent[i].reading%>
-                    </p>
-                    <p>Time - <%= recent[i].time%>
-                    </p>
-                </div>
-                <%}%>
+        <div class="btn1">
+            <button id="recentButton">Recent</button>
         </div>
-    </div>
-    <!-- Normal -->
-    <div class="normalcontainer">
-        <h1>Normal</h1>
-        <div class="users">
-            <%for(let j=0; j < normal.length;j++){%>
-                <div class="person">
-                    <h4>Name - <%= normal[j].name%>
-                    </h4>
-                    <p>Gender - <%= normal[j].gender%>
-                    </p>
-                    <p>Age - <%= normal[j].age%>
-                    </p>
-                    <p>Contact - <%= normal[j].contact%>
-                    </p>
-                    <p>Reading - <%= normal[j].reading%>
-                    </p>
-                    <p>Time - <%= normal[j].time%>
-                    </p>
-                </div>
-                <%}%>
+        <div class="btn2">
+            <button id="normalButton">Normal</button>
         </div>
-    </div>
-    <!-- Moderate -->
-    <div class="moderatecontainer">
-        <h1>Moderate</h1>
-        <div class="users">
-            <%for(let k=0; k < moderate.length;k++){%>
-                <div class="person">
-                    <h4>Name - <%= moderate[k].name%>
-                    </h4>
-                    <p>Gender - <%= moderate[k].gender%>
-                    </p>
-                    <p>Age - <%= moderate[k].age%>
-                    </p>
-                    <p>Contact - <%= moderate[k].contact%>
-                    </p>
-                    <p>Reading - <%= moderate[k].reading%>
-                    </p>
-                    <p>Time - <%= moderate[k].time%>
-                    </p>
-                </div>
-                <%}%>
+        <div class="btn3">
+            <button id="moderateButton">Moderate</button>
         </div>
-    </div>
-    <!-- Extreme -->
-    <div class="extremecontainer">
-        <h1>Extreme</h1>
-        <div class="users">
-            <%for(let l=0; l < extreme.length;l++){%>
-                <div class="person">
-                    <h4>Name - <%= extreme[l].name%>
-                    </h4>
-                    <p>Gender - <%= extreme[l].gender%>
-                    </p>
-                    <p>Age - <%= extreme[l].age%>
-                    </p>
-                    <p>Contact - <%= extreme[l].contact%>
-                    </p>
-                    <p>Reading - <%= extreme[l].reading%>
-                    </p>
-                    <p>Time - <%= extreme[l].time%>
-                    </p>
-                </div>
-                <%}%>
+        <div class="btn4">
+            <button id="extremeButton">Extreme</button>
         </div>
     </div>
 
+    <div class="recent">
+        <%for(let i=0; i < recent.length;i++){%>
+            <div class="responsive-table">
+                <section class="day-section-sunday">
+                    <p class="day-content recipe">
+                        <%= recent[i].name%>
+                    </p>
+                </section>
+
+                <section class="day-section-monday">
+                    <p class="day-content recipe">
+                        <%= recent[i].age%>
+                    </p>
+                </section>
+
+                <section class="day-section-tuesday">
+                    <p class="day-content recipe">
+                        <%= recent[i].gender%>
+                    </p>
+                </section>
+
+                <section class="day-section-wednesday">
+                    <p class="day-content recipe">
+                        <%= recent[i].contact%>
+                    </p>
+                </section>
+
+                <section class="day-section-thursday">
+                    <p class="day-content recipe">
+                        <%= recent[i].reading%>
+                    </p>
+                </section>
+
+                <section class="day-section-friday">
+                    <p class="day-content recipe">
+                        <%= recent[i].time%>
+                    </p>
+                </section>
+            </div>
+            <%}%>
+    </div>
+
+    <div class="normal">
+        <%for(let j=0; j < normal.length;j++){%>
+            <div class="responsive-table">
+                <section class="day-section-sunday">
+                    <p class="day-content recipe">
+                        <%= normal[j].name%>
+                    </p>
+                </section>
+
+                <section class="day-section-monday">
+                    <p class="day-content recipe">
+                        <%= normal[j].age%>
+                    </p>
+                </section>
+
+                <section class="day-section-tuesday">
+                    <p class="day-content recipe">
+                        <%= normal[j].gender%>
+                    </p>
+                </section>
+
+                <section class="day-section-wednesday">
+                    <p class="day-content recipe">
+                        <%= normal[j].contact%>
+                    </p>
+                </section>
+
+                <section class="day-section-thursday">
+                    <p class="day-content recipe">
+                        <%= normal[j].reading%>
+                    </p>
+                </section>
+
+                <section class="day-section-friday">
+                    <p class="day-content recipe">
+                        <%= normal[j].time%>
+                    </p>
+                </section>
+            </div>
+            <%}%>
+    </div>
 
 
+    <div class="moderate">
+        <%for(let k=0; k < moderate.length;k++){%>
+            <div class="responsive-table">
+                <section class="day-section-sunday">
+                    <p class="day-content recipe">
+                        <%= moderate[k].name%>
+                    </p>
+                </section>
 
+                <section class="day-section-monday">
+                    <p class="day-content recipe">
+                        <%= moderate[k].age%>
+                    </p>
+                </section>
+
+                <section class="day-section-tuesday">
+                    <p class="day-content recipe">
+                        <%= moderate[k].gender%>
+                    </p>
+                </section>
+
+                <section class="day-section-wednesday">
+                    <p class="day-content recipe">
+                        <%= moderate[k].contact%>
+                    </p>
+                </section>
+
+                <section class="day-section-thursday">
+                    <p class="day-content recipe">
+                        <%= moderate[k].reading%>
+                    </p>
+                </section>
+
+                <section class="day-section-friday">
+                    <p class="day-content recipe">
+                        <%= moderate[k].time%>
+                    </p>
+                </section>
+            </div>
+            <%}%>
+    </div>
+
+    <div class="extreme">
+        <%for(let l=0; l < extreme.length; l++){%>
+            <div class="responsive-table">
+                <section class="day-section-sunday">
+                    <p class="day-content recipe">
+                        <%= extreme[l].name%>
+                    </p>
+                </section>
+
+                <section class="day-section-monday">
+                    <p class="day-content recipe">
+                        <%= extreme[l].age%>
+                    </p>
+                </section>
+
+                <section class="day-section-tuesday">
+                    <p class="day-content recipe">
+                        <%= extreme[l].gender%>
+                    </p>
+                </section>
+
+                <section class="day-section-wednesday">
+                    <p class="day-content recipe">
+                        <%= extreme[l].contact%>
+                    </p>
+                </section>
+
+                <section class="day-section-thursday">
+                    <p class="day-content recipe">
+                        <%= extreme[l].reading%>
+                    </p>
+                </section>
+
+                <section class="day-section-friday">
+                    <p class="day-content recipe">
+                        <%= extreme[l].time%>
+                    </p>
+                </section>
+            </div>
+            <%}%>
+    </div>
+
+    <div class="logout">
+        <a href="/logout"><button id="logoutbtn"><i class="fa fa-sign-out" aria-hidden="true"></i></button></a>
+    </div>
 </body>
 <script>
-    const recentBtn = document.querySelector("#recent");
-    const normalBtn = document.querySelector("#normal");
-    const moderateBtn = document.querySelector("#moderate");
-    const extremeBtn = document.querySelector("#extreme");
+    const recentButton = document.querySelector("#recentButton"),
+        normalButton = document.querySelector("#normalButton"),
+        moderateButton = document.querySelector("#moderateButton"),
+        extremeButton = document.querySelector("#extremeButton");
 
 
-    recentBtn.addEventListener("click", function () {
-        document.querySelector(".recentcontainer").style.display = "block";
-        document.querySelector(".normalcontainer").style.display = "none";
-        document.querySelector(".moderatecontainer").style.display = "none";
-        document.querySelector(".extremecontainer").style.display = "none";
+    recentButton.addEventListener("click", function () {
+        document.querySelector(".recent").style.display = "block";
+        document.querySelector(".normal").style.display = "none";
+        document.querySelector(".moderate").style.display = "none";
+        document.querySelector(".extreme").style.display = "none";
     })
 
-    normalBtn.addEventListener("click", function () {
-        document.querySelector(".recentcontainer").style.display = "none";
-        document.querySelector(".normalcontainer").style.display = "block";
-        document.querySelector(".moderatecontainer").style.display = "none";
-        document.querySelector(".extremecontainer").style.display = "none";
+    normalButton.addEventListener("click", function () {
+        document.querySelector(".recent").style.display = "none";
+        document.querySelector(".normal").style.display = "block";
+        document.querySelector(".moderate").style.display = "none";
+        document.querySelector(".extreme").style.display = "none";
     })
 
-    moderateBtn.addEventListener("click", function () {
-        document.querySelector(".recentcontainer").style.display = "none";
-        document.querySelector(".normalcontainer").style.display = "none";
-        document.querySelector(".moderatecontainer").style.display = "block";
-        document.querySelector(".extremecontainer").style.display = "none";
+    moderateButton.addEventListener("click", function () {
+        document.querySelector(".recent").style.display = "none";
+        document.querySelector(".normal").style.display = "none";
+        document.querySelector(".moderate").style.display = "block";
+        document.querySelector(".extreme").style.display = "none";
     })
 
-    extremeBtn.addEventListener("click", function () {
-        document.querySelector(".recentcontainer").style.display = "none";
-        document.querySelector(".normalcontainer").style.display = "none";
-        document.querySelector(".moderatecontainer").style.display = "none";
-        document.querySelector(".extremecontainer").style.display = "block";
+    extremeButton.addEventListener("click", function () {
+        document.querySelector(".recent").style.display = "none";
+        document.querySelector(".normal").style.display = "none";
+        document.querySelector(".moderate").style.display = "none";
+        document.querySelector(".extreme").style.display = "block";
     })
 </script>
 
