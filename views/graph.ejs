@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Link awesome CDN -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+        integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <title>
+        <%=name%>
+    </title>
+</head>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+    }
+
+    html,
+    body {
+        background: #f1f3f8;
+    }
+
+    #myChart {
+        width: 200px;
+        height: 200px;
+    }
+
+    .button {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 5%;
+    }
+
+    .button button {
+        padding: .6em 2em .6em 2em;
+        outline: none;
+        border: none;
+        cursor: pointer;
+        background: rgb(25, 48, 70);
+        color: #ffffff;
+        font-weight: 500;
+        font-family: 'Montserrat', sans-serif;
+        border-radius: 5px;
+        font-size: 1rem;
+        text-transform: uppercase;
+        font-weight: bold;
+        letter-spacing: 1px;
+        text-shadow: 1px 1px 2px #000000;
+        transition: .3s;
+    }
+
+    .button button:hover {
+        background: rgb(61, 64, 66);
+    }
+</style>
+
+<body>
+    <canvas id="myChart" width="300" height="90"></canvas>
+
+    <div class="button">
+        <a href="/dashboard"><button id="back"><i class="fa fa-chevron-left" aria-hidden="true"></i></button></a>
+    </div>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.2.1/dist/chart.min.js"
+    integrity="sha256-uVEHWRIr846/vAdLJeybWxjPNStREzOlqLMXjW/Saeo=" crossorigin="anonymous"></script>
+<script>
+    const readings = `<%=readings%>`;
+    const time = `<%=time%>`;
+    console.log(readings.split(","));
+    console.log(time.split(","));
+
+
+    var ctx = document.getElementById('myChart').getContext('2d');
+    var myChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: time.split(","),
+            datasets: [{
+                label: 'Breathe Reading',
+                data: readings.split(","),
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                    'rgba(255, 159, 64, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+</script>
+
+</html>

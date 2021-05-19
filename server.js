@@ -182,6 +182,7 @@ app.get("/dashboard", checkUser, function (request, response) {
                     // Store users into array according to readings !
                     if (users[i].readings[j].reading > 0 && users[i].readings[j].reading < 5) {
                         const normalPerson = {
+                            id: users[i]._id,
                             name: users[i].name,
                             age: users[i].age,
                             gender: users[i].gender,
@@ -196,6 +197,7 @@ app.get("/dashboard", checkUser, function (request, response) {
 
                         if (users[i].readings[j].reading > 4 && users[i].readings[j].reading < 8) {
                             const moderatePerson = {
+                                id: users[i]._id,
                                 name: users[i].name,
                                 age: users[i].age,
                                 gender: users[i].gender,
@@ -208,6 +210,7 @@ app.get("/dashboard", checkUser, function (request, response) {
                             moderate.push(moderatePerson);
                         } else {
                             const extremePerson = {
+                                id: users[i]._id,
                                 name: users[i].name,
                                 age: users[i].age,
                                 gender: users[i].gender,
@@ -254,6 +257,37 @@ app.get("/dashboard", checkUser, function (request, response) {
         })
         .catch(function (err) {
             console.log("Something went wrong !", err);
+        });
+})
+
+app.get("/graph/:id", checkUser, function (request, response) {
+    const {
+        id
+    } = request.params;
+
+    User.findOne({
+            _id: id
+        })
+        .then(function (user) {
+            console.log('Graph User :', user);
+
+            const readings = [];
+            const time = [];
+
+            user.readings.forEach(element => {
+                readings.push(element.reading);
+                time.push(element.time.replace(/GMT\+0530 \(India Standard Time\)$/, ""));
+            });
+
+            // Response
+            response.render("graph", {
+                time: time,
+                readings: readings,
+                name: user.name
+            })
+        })
+        .catch(function (error) {
+            console.log(`Something went wrong : ${error}`);
         });
 })
 
